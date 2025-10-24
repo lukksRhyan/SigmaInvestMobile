@@ -1,39 +1,35 @@
-# Welcome to your Expo app 👋
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/1976542d-eeab-43eb-8819-476b9f707fdc" />
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+# SigmaInvest (Standalone App)
+## O que é?
+Sigma invest é um aplicativo para gerenciamento de investimentos, focado em dividendos.
 
-## Get started
+## Capturas de tela
+<div flex-direction="row" >
+<img width="720" height="1600" alt="image" src="https://github.com/user-attachments/assets/994d2bb6-1b9d-401a-beba-af83993bead2" />
+<img width="720" height="1600" alt="image" src="https://github.com/user-attachments/assets/0df13b1f-2a51-4306-8ee3-9db67ed47fcf" />
 
-1. Install dependencies
+</div>
+
+
+## Preparativos
+
+1. Instalar dependências
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Buildar aplicativo (usando o expo)
 
    ```bash
     npx expo start
    ```
 
-In the output, you'll find options to open the app in a
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
 
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
 ## Learn more
 
