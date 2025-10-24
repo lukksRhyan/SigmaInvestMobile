@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import {AuthProvider} from "@/context/AuthContext";
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import {StockProvider} from "@/context/StockContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -29,7 +30,8 @@ export default function RootLayout() {
   }
 
   return (
-      <AuthProvider>
+    <AuthProvider>
+      <StockProvider>
 
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
@@ -37,6 +39,7 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
       </Stack>
     </ThemeProvider>
-      </AuthProvider>
+      </StockProvider>
+    </AuthProvider>
   );
 }

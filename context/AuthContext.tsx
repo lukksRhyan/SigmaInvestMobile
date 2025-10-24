@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {string} from "prop-types";
+import {ApiConfig} from "@/types/dividendTypes";
 
 
 interface AuthContextType {
@@ -17,6 +18,9 @@ interface AuthContextType {
     createPortfolio: (token:string, title:string) => Promise<'OK'|'ERROR'|undefined>;
     fetchStocks:()=>Promise<any[]>;
     transaction:(asset:any,portfolioId:string,quantity:string,quotation:string) => Promise<any>;
+
+    stocks:string[] |null;
+    apiConfig:ApiConfig|null;
 }
 const AuthContext = createContext<AuthContextType|undefined>(undefined);
 
@@ -27,7 +31,10 @@ export const AuthProvider: React.FC<{children:React.ReactNode}> = ({children}) =
     const [userPortfolios, setUserPortfolios] = useState<any[]|null>(null);
     const [portfolioAssets, setPortfolioAssets] = useState<any[]|null>(null);
 
-    const baseUrl = 'http://ip_da_maquina:8080/'//pode-se alterar pelo ip da maquina
+    const [stocks, setStocks] = useState<string[]|null>(null);
+    const [apiConfig, setApiConfig] = useState<ApiConfig|null>(null);
+
+    const baseUrl = 'http://192.168.55.24:8080/'//pode-se alterar pelo ip da maquina
 
     const fetchUserData:(token:string)=>Promise<void> = async (token:string):Promise<void> =>{
       try{
@@ -167,6 +174,7 @@ export const AuthProvider: React.FC<{children:React.ReactNode}> = ({children}) =
         })
         const data = await response.json();
         if (response.ok){
+            console.log(data);
             return data
         }
         }catch (e) {
@@ -205,7 +213,9 @@ export const AuthProvider: React.FC<{children:React.ReactNode}> = ({children}) =
             fetchStocks,
             fetchUserPortfolios,
             createPortfolio,
-            transaction}}>
+            transaction,
+            stocks,
+            apiConfig}}>
             {children}
         </AuthContext.Provider>
     )

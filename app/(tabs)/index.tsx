@@ -1,65 +1,133 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import {View, Text, Image, StyleSheet, Platform, ScrollView, Button} from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import {generateMockStockShares} from "@/data/mockStockShares";
 
 import {useAuth} from "@/context/AuthContext";
+import {useDividends} from "@/hooks/useDividends";
+import {Dividend} from "@/types/dividendTypes";
+import {toBRL} from "@/scripts/utils";
+import {useState} from "react";
+import CustomModal from "@/components/CustomModal";
 
 export default function HomeScreen() {
+  const total = 0.0
+  const [isFilterModalVisible,setFilterModalVisible] = useState(false);
+  const mockStockShares = generateMockStockShares();
 
-    const {token} = useAuth();
+  const [selectedYear, setSelectedYear] = useState<string>('Todos');
+  const [selectedMonth, setSelectedMonth] = useState<string>('Todos');
+  const [filteredDividends, setFilteredDividends] = useState<Dividend[]>([]);
 
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/sigmainvest outline.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const toggleFilterModal=()=>{setFilterModalVisible(!isFilterModalVisible)}
+  const dividendData = Object.values(mockStockShares).flatMap(stock =>
+    stock.payments.map(payment => ({
+      ...payment,
+      totalAmount: payment.amount * stock.quantity
+    }))
+  );
+
+
+  return (<ScrollView scrollEnabled={!isFilterModalVisible}>
+
+    <View style={styles.container}>
+
+     <View>
+         <Text style={styles.headerText}>Dashboard</Text>
+     </View>
+      <View style={styles.graph}>
+        grafico
+      </View>
+
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Dividendos do mês</Text>
+        <Text style={styles.valueText}>R$ {total.toFixed(2).replace('.',',')}</Text>
+      </View>
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Ativos</Text>
+        <Button title={'filtrar'} onPress={toggleFilterModal}/>
+
+      {dividendData?.length>0?(
+        dividendData?.map((dividend, index:number)=>{
+          const isEvenItem = (index % 2 === 0)
+          return <View style={[styles.dividendItem,{
+          backgroundColor: isEvenItem ? '#f8f8f8' : '#1a237e',
+          borderBottomWidth: 1,
+          borderBottomColor: '#ddd'
+        }]}>
+            <Text style={[styles.dividendItemText,{
+              color: isEvenItem ? '#1a237e' : '#f8f8f8'
+            }]}>
+              {dividend?.ticker}: {toBRL(dividend?.amount)}
+            </Text>
+          </View>
+        })
+      ):(
+        <Text>;-;</Text>
+      )}
+      </View>
+    </View>
+    <CustomModal  visible={isFilterModalVisible} onClose={ toggleFilterModal}>
+      <Text>fiLTRADO</Text>
+    </CustomModal>
+  </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  container: {
+    flexDirection: 'column',
     alignItems: 'center',
     gap: 8,
+    borderTopColor:'#1A237E',
+    borderTopWidth:5,
+    borderStyle:"solid"
+  },
+  header:{
+
+  },
+  dividendItem:{
+    flexDirection:'row',
+    justifyContent:'space-around',
+    alignItems:'center',
+    backgroundColor:'#1a237e',
+    width:'100%',
+    height:'25%'
+  },
+  dividendItemText:{
+    fontSize:16,
+    fontWeight:'bold'
+  },
+
+  headerText:{
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#1A237E',
+  },
+  graph:{
+    width:'80%',
+    backgroundColor:'green',
+    aspectRatio:1.75,
+    maxHeight:400
+  },
+  sectionContainer:{
+    flexDirection:'column',
+    alignItems:'center',
+    width:'100%',
+  },
+  valueText:{
+    color:'green',
+    fontWeight:'bold',
+    fontSize:32
+  },
+  sectionTitle:{
+    fontSize: 32,
+    color: '#1A237E',
+    borderBottomWidth:3,
+    borderBottomColor: '#1A237E',
   },
   stepContainer: {
     gap: 8,
