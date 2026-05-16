@@ -1,4 +1,4 @@
-
+q
 export interface Dividend {
   id: string;
   ticker: string;
